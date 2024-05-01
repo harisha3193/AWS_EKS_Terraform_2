@@ -1,7 +1,10 @@
 # configure aws provider
 provider "aws" {
   region  = var.region
-  profile = "konvoy"
+  #comment profile and uncomment access and secret key when checked-in in github
+  profile = "harisha3193"
+  # access_key = var.prod_aws_key
+  # secret_key = var.prod_aws_secret
 }
 
 # configure backend
