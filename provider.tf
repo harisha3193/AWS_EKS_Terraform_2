@@ -10,10 +10,10 @@ provider "aws" {
 # configure backend
 terraform {
   backend "s3" {
-    bucket         = "konvoy-terraform"
+    bucket         = "konvoy-terraform-bucket"
     key            = "terraform.tfstate"
     region         = "us-east-2"
-    profile        = "konvoy"
+    profile        = "harisha3193"
     dynamodb_table = "terraform-state-lock-dynamodb-konvoy"
   }
 }
