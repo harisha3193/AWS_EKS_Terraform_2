@@ -37,3 +37,7 @@ variable "type" {
 variable "key_name" {
   default = "konvoy_key"
 }
+
+variable "name" {
+ type = string
+}

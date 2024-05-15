@@ -12,3 +12,11 @@ output "master_arn" {
 output "worker_arn" {
   value = aws_iam_role.worker.arn
 }
+
+output "kubernetes_cluster_role_binding" {
+  value = kubernetes_cluster_role_binding.ingress
+}
+
+output "kubernetes_service_account" {
+    value = kubernetes_service_account.ingress
+}

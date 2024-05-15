@@ -47,3 +47,16 @@ variable "key_name" {
 variable "instance_size" {
   type = string
 }
+
+variable "kubernetes_cluster_role_binding" {}
+
+variable "kubernetes_service_account" {}
+
+# VPC ID
+variable "vpc_id" {
+  type = string
+}
+
+variable "region" {
+  type = string
+}
