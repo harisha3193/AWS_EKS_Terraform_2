@@ -78,3 +78,59 @@ resource "aws_eks_node_group" "node-grp" {
     max_unavailable = 1
   }
 }
+
+
+##################   ingress-nginx   ##################
+
+resource "helm_release" "ingress-nginx" {
+  namespace = "nginx-ingress"
+  create_namespace = true
+
+  name                = "ingress-nginx"
+  repository          = "https://kubernetes.github.io/ingress-nginx"
+  chart               = "ingress-nginx"
+  wait                = true
+  cleanup_on_fail     = true
+  force_update        = true
+  replace             = true
+  lint                = true
+
+  set {
+    name  = "rbac.create"
+    value = true
+  }
+
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
+    value = "nlb"
+  }
+
+  set {
+    name  = "controller.service.type"
+    value = "LoadBalancer"
+  }
+
+  set {
+    name  = "controller.image.allowPrivilegeEscalation"
+    value = false
+  }
+   values = [
+     <<-EOT
+     controller:
+       service:
+         type: LoadBalancer
+         annotations:
+           service.beta.kubernetes.io/aws-load-balancer-name: apps-ingress
+           service.beta.kubernetes.io/aws-load-balancer-type: external
+           service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+           service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+           service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: http
+           service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: /healthz
+           service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: 10254
+       image:
+         allowPrivilegeEscalation: false
+     EOT
+   ]
+
+   depends_on = [aws_eks_node_group.node-grp]
+}
